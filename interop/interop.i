@@ -1,5 +1,6 @@
 %module InteropModule
 
+%include <std_string.i>
 %include <typemaps.i>
 %include <arrays_csharp.i>
 %include <windows.i>

@@ -8,7 +8,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("Hello, World!");
             var sc = InteropModule.GetVersion();
-
+            Console.WriteLine(sc);
             var se = new SpaceExclusion();
             
 
