@@ -15,6 +15,7 @@ std::string& GetVersion() {
 
 
 SpaceExclusion::SpaceExclusion() {
+  std::cout << "Constructed" << std::endl;
 }
 
 int SpaceExclusion::InitializeVertices(const float* pVertices, int nVertices, const int* pIndices, int nIndices,  float strength)
