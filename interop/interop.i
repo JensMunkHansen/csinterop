@@ -2,6 +2,7 @@
 
 %include <typemaps.i>
 %include <arrays_csharp.i>
+%include <windows.i>
 
 %apply const std::string& {std::string &};
 
