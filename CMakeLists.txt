@@ -9,5 +9,15 @@ set(CSINTEROP_SHORT_VERSION "${CSINTEROP_MAJOR_VERSION}.${CSINTEROP_MINOR_VERSIO
 set(CSINTEROP_VERSION "${CSINTEROP_SHORT_VERSION}.${CSINTEROP_PATCH_VERSION}")
 
 set(LIB_TYPE STATIC)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+if (BUILD_SHARED_LIBS)
+  set(LIB_TYPE SHARED)
+endif()
+
+set(NET_PROJECT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dotnet")
 
 add_subdirectory(native)
+
+add_subdirectory(interop)
+
+#add_subdirectory(dotnet)

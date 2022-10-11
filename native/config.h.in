@@ -1,1 +1,13 @@
+/**
+ * @file   fnm.hpp
+ * @author Jens Munk Hansen <jens.hansen@3shape.com>
+ * @date   Tue Jun  7 23:52:37 2016
+ *
+ * @brief  Auto-generated configuration file
+ *
+ * Copyright 2022, 3Shape A/S
+ *
+ */
+#pragma once
+
 #define CSINTEROP_VERSION_STRING "@CSINTEROP_VERSION@"
