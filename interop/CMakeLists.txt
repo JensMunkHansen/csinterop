@@ -8,7 +8,10 @@ set_property(SOURCE interop.i
   PROPERTY
   USE_TARGET_INCLUDE_DIRECTORIES "${PROJECT_SOURCE_DIR}/native;${PROJECT_BINARY_DIR}/native"
 )
-
+set_property(SOURCE interop.i
+  PROPERTY
+  SWIG_FLAGS "-namespace" "Interop")
+  
 swig_add_library(interop
   TYPE SHARED
   LANGUAGE CSharp
@@ -30,4 +33,8 @@ set_target_properties( interop
 
   # Set address of C++ headers (if any)
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_sources(interop
+  PUBLIC ${swig_extra_generated_files}
 )

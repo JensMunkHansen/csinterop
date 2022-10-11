@@ -1,4 +1,6 @@
-﻿namespace ConsoleApp1
+﻿using Interop;
+
+namespace ConsoleApp1
 {
     internal class Program
     {
