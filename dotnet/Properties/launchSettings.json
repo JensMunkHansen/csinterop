@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CSharpProject": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
