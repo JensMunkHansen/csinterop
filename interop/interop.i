@@ -16,6 +16,8 @@
 // Pinning
 %apply float FIXED[] { const float* pVertices }
 %csmethodmodifiers InitializeVertices "public unsafe";
+%apply int FIXED[] { const int* pIndices }
+%csmethodmodifiers InitializeVertices "public unsafe";
 
 // PInvoke (copy)
 %apply float INPUT[] {const float* pDepths }
