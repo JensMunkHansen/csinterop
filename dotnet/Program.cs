@@ -11,6 +11,9 @@ namespace ConsoleApp1
 
             var sc = InteropModule.GetVersion();
             Console.WriteLine(sc);
+
+            var bla = InteropModule.GetLongString();
+            
             var se = new SpaceExclusion();
             // se.InitializeVertices()
         }

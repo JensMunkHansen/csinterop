@@ -13,6 +13,12 @@ std::string& GetVersion() {
   return version;
 }
 
+std::string GetLongString()
+{
+    // TODO: insert return statement here
+    return std::string("This is a longer string");
+}
+
 
 SpaceExclusion::SpaceExclusion() {
   std::cout << "Constructed" << std::endl;

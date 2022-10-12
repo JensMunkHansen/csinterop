@@ -8,6 +8,8 @@ MYLIBRARY_EXPORT int TestMe();
 
 MYLIBRARY_EXPORT std::string& GetVersion();
 
+MYLIBRARY_EXPORT std::string GetLongString();
+
 class MYLIBRARY_EXPORT SpaceExclusion {
  public:
   SpaceExclusion();
