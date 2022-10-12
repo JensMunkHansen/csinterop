@@ -2,6 +2,9 @@
   "profiles": {
     "CSharpProject": {
       "commandName": "Project",
+      "environmentVariables": {
+        "PATH": "%PATH%;$(OutputDir)/../.."
+      },
       "nativeDebugging": true
     }
   }
