@@ -1,20 +1,19 @@
-﻿using MyLibraryInterop;
-using System;
+﻿using System;
 
-namespace ConsoleApp1
+namespace SampleInterop
 {
     internal class Program
     {
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, World!");
-            
-            MyLibraryInterop.MyLibraryInterop.GetVersion();
-            var sc = MyLibraryInterop.MyLibraryInterop.GetVersion();
+
+            MyLibraryInterop.GetVersion();
+            var sc = MyLibraryInterop.GetVersion();
             Console.WriteLine(sc);
 
-            var bla = MyLibraryInterop.MyLibraryInterop.GetLongString();
-            
+            var bla = MyLibraryInterop.GetLongString();
+
             var se = new SpaceExclusion();
             // se.InitializeVertices()
         }

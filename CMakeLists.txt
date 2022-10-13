@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.18)
 # TODO: Figure out how to reference Interop from CSharp
 project(CSINTEROP
   VERSION 1.0.0
-  LANGUAGES CXX
+  LANGUAGES CXX CSharp
 )
 
-# TODO: Add CSHARP
+set(CSINTEROP_DOTNET_TARGET_FRAMEWORK_VERSION "v4.8")
 
 set(CSINTEROP_MAJOR_VERSION 1)
 set(CSINTEROP_MINOR_VERSION 0)
@@ -22,12 +22,23 @@ if (BUILD_SHARED_LIBS)
   set(LIB_TYPE SHARED)
 endif()
 
+
+set(CMAKE_CSharp_FLAGS "${CMAKE_CSharp_FLAGS} /langversion:6")
+
 # HACK: Copy output of interop into the CSharp project
 set(NET_PROJECT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dotnet")
+
+set(GLOBAL_NAMESPACE SampleInterop)
+
+set(DOTNET_TARGET_FRAMEWORK ${CSINTEROP_DOTNET_TARGET_FRAMEWORK_VERSION})
+
+set(HACK 0)
 
 add_subdirectory(native)
 
 add_subdirectory(interop)
 
-# TODO: Figure out how to reference Interop from CSharp
-add_subdirectory(dotnet)
+if (NOT HACK)
+  # TODO: Figure out how to reference Interop from CSharp
+  add_subdirectory(dotnet)
+endif()

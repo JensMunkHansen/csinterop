@@ -1,9 +1,10 @@
+# Consider/check Class Library, netstandard2.0, Embed manifest with default settings
+
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
 
-
 execute_process(
-  COMMAND swig -csharp -c++ -namespace MyLibraryInterop -I${PROJECT_SOURCE_DIR}/native -I${PROJECT_BINARY_DIR}/native -outcurrentdir ${CMAKE_CURRENT_SOURCE_DIR}/interop.i
+  COMMAND swig -csharp -c++ -namespace ${GLOBAL_NAMESPACE} -I${PROJECT_SOURCE_DIR}/native -I${PROJECT_BINARY_DIR}/native -outcurrentdir ${CMAKE_CURRENT_SOURCE_DIR}/interop.i
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -20,58 +21,65 @@ set_property(SOURCE interop.i
 )
 set_property(SOURCE interop.i
   PROPERTY
-  SWIG_FLAGS "-namespace" "MyLibraryInterop")
-  
-swig_add_library(MyLibraryInterop
-  TYPE SHARED
-  LANGUAGE CSharp
-  SOURCES interop.i ${OUT_SRC}
-  OUTPUT_DIR ${NET_PROJECT_DIR} # WORKS
-  OUTFILE_DIR ${NET_PROJECT_DIR}) # WORKS
-#  OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}
-#  OUTFILE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+  SWIG_FLAGS "-namespace" ${GLOBAL_NAMESPACE})
+
+if (HACK)
+  swig_add_library(MyLibraryInterop
+    TYPE SHARED
+    LANGUAGE CSharp
+    SOURCES interop.i ${OUT_SRC}
+    OUTPUT_DIR ${NET_PROJECT_DIR} # WORKS
+    OUTFILE_DIR ${NET_PROJECT_DIR}) # WORKS
+else()
+  swig_add_library(MyLibraryInterop
+    TYPE SHARED
+    LANGUAGE CSharp
+    SOURCES interop.i ${OUT_SRC}
+    OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}
+    OUTFILE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+endif()
 
 
 swig_link_libraries(MyLibraryInterop PUBLIC MyLibrary)
 
-if (0)
-# THIS IS JUST TESTING..... Cannot set project reference!!!!
 add_library(mylibs::MyLibraryInterop ALIAS MyLibraryInterop)
-set_property(TARGET MyLibraryInterop PROPERTY DOTNET_TARGET_FRAMEWORK_VERSION "v6.0")
-set_property(TARGET MyLibraryInterop PROPERTY VS_DOTNET_REFERENCES
-    "Microsoft.CSharp"
-)
+set_property(TARGET MyLibraryInterop PROPERTY DOTNET_TARGET_FRAMEWORK_VERSION ${CSINTEROP_DOTNET_TARGET_FRAMEWORK_VERSION})
+# set_property(TARGET MyLibraryInterop PROPERTY VS_DOTNET_REFERENCES "CSharp")
+
+if (HACK)
+  if (${CSINTEROP_DOTNET_TARGET_FRAMEWORK_VERSION} STREQUAL "v6.0")
+    set(NETDIR "net6.0")
+  endif()
+
+  # for copying .dll to .Net project dir dir
+  set_target_properties( MyLibraryInterop
+    PROPERTIES
+    
+    # These copy .dll on Windows 
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${NET_PROJECT_DIR}/bin/Release/${NETDIR}
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${NET_PROJECT_DIR}/bin/Debug/${NETDIR}
+  
+    # This copies .so on Linux to .Net project directory
+    LIBRARY_OUTPUT_DIRECTORY ${NET_PROJECT_DIR}
+  
+    # Set address of C++ headers (if any)
+    INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+else()
+  set_target_properties( MyLibraryInterop
+    PROPERTIES
+  
+    # These copy .dll on Windows to .Net project directory
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR}/Release
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}/Debug
+  
+    # This copies .so on Linux to .Net project directory
+    LIBRARY_OUTPUT_DIRECTORY ${NET_PROJECT_DIR}
+  
+    # Set address of C++ headers (if any)
+    INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}
+  )
 endif()
-
-
-# for copying .dll to .Net project dir dir
-set_target_properties( MyLibraryInterop
-  PROPERTIES
-
-  # These copy .dll on Windows to .Net project directory
-  RUNTIME_OUTPUT_DIRECTORY_RELEASE ${NET_PROJECT_DIR}/bin/Release/net6.0
-  RUNTIME_OUTPUT_DIRECTORY_DEBUG ${NET_PROJECT_DIR}/bin/Debug/net6.0/
-#  RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR}/bin/Release/net6.0 # Works
-#  RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}/bin/Debug/net6.0 # Works
-
-  # This copies .so on Linux to .Net project directory
-  LIBRARY_OUTPUT_DIRECTORY ${NET_PROJECT_DIR}
-
-  # Set address of C++ headers (if any)
-  INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-if (0)
-  get_property(swigGeneratedFiles TARGET MyLibraryInterop PROPERTY SWIG_SUPPORT_FILES)
-  
-  target_sources(MyLibraryInterop
-    PUBLIC
-    ${swigGeneratedFiles})
-  
-  
-  message(${swigGeneratedFiles})
-endif()
-
 
 # Utility function for dumping variables
 function(dump_cmake_variables)
