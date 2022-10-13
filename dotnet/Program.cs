@@ -8,11 +8,12 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, World!");
-
-            var sc = InteropModule.GetVersion();
+            
+            MyLibraryInterop.MyLibraryInterop.GetVersion();
+            var sc = MyLibraryInterop.MyLibraryInterop.GetVersion();
             Console.WriteLine(sc);
 
-            var bla = InteropModule.GetLongString();
+            var bla = MyLibraryInterop.MyLibraryInterop.GetLongString();
             
             var se = new SpaceExclusion();
             // se.InitializeVertices()

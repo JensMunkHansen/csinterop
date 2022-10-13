@@ -1,6 +1,16 @@
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
-# set(SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE) # Why link libraries does not work
+
+
+execute_process(
+  COMMAND swig -csharp -c++ -namespace MyLibraryInterop -I${PROJECT_SOURCE_DIR}/native -I${PROJECT_BINARY_DIR}/native -outcurrentdir ${CMAKE_CURRENT_SOURCE_DIR}/interop.i
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+file(GLOB OUT_SRC
+    CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_BINARY_DIR}/*.cs"
+)
 
 set_property(SOURCE interop.i PROPERTY CPLUSPLUS ON)
 
@@ -15,11 +25,24 @@ set_property(SOURCE interop.i
 swig_add_library(MyLibraryInterop
   TYPE SHARED
   LANGUAGE CSharp
-  SOURCES interop.i
-  OUTPUT_DIR ${NET_PROJECT_DIR}
-  OUTFILE_DIR ${NET_PROJECT_DIR})
+  SOURCES interop.i ${OUT_SRC}
+  OUTPUT_DIR ${NET_PROJECT_DIR} # WORKS
+  OUTFILE_DIR ${NET_PROJECT_DIR}) # WORKS
+#  OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}
+#  OUTFILE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
 
 swig_link_libraries(MyLibraryInterop PUBLIC MyLibrary)
+
+if (0)
+# THIS IS JUST TESTING..... Cannot set project reference!!!!
+add_library(mylibs::MyLibraryInterop ALIAS MyLibraryInterop)
+set_property(TARGET MyLibraryInterop PROPERTY DOTNET_TARGET_FRAMEWORK_VERSION "v6.0")
+set_property(TARGET MyLibraryInterop PROPERTY VS_DOTNET_REFERENCES
+    "Microsoft.CSharp"
+)
+endif()
+
 
 # for copying .dll to .Net project dir dir
 set_target_properties( MyLibraryInterop
@@ -28,6 +51,8 @@ set_target_properties( MyLibraryInterop
   # These copy .dll on Windows to .Net project directory
   RUNTIME_OUTPUT_DIRECTORY_RELEASE ${NET_PROJECT_DIR}/bin/Release/net6.0
   RUNTIME_OUTPUT_DIRECTORY_DEBUG ${NET_PROJECT_DIR}/bin/Debug/net6.0/
+#  RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR}/bin/Release/net6.0 # Works
+#  RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}/bin/Debug/net6.0 # Works
 
   # This copies .so on Linux to .Net project directory
   LIBRARY_OUTPUT_DIRECTORY ${NET_PROJECT_DIR}
@@ -35,3 +60,33 @@ set_target_properties( MyLibraryInterop
   # Set address of C++ headers (if any)
   INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+if (0)
+  get_property(swigGeneratedFiles TARGET MyLibraryInterop PROPERTY SWIG_SUPPORT_FILES)
+  
+  target_sources(MyLibraryInterop
+    PUBLIC
+    ${swigGeneratedFiles})
+  
+  
+  message(${swigGeneratedFiles})
+endif()
+
+
+# Utility function for dumping variables
+function(dump_cmake_variables)
+  get_cmake_property(_variableNames VARIABLES)
+  list (SORT _variableNames)
+  foreach (_variableName ${_variableNames})
+    if (ARGV0)
+      unset(MATCHED)
+      string(REGEX MATCH ${ARGV0} MATCHED ${_variableName})
+      if (NOT MATCHED)
+        continue()
+      endif()
+    endif()
+    message(STATUS "${_variableName}=${${_variableName}}")
+  endforeach()
+endfunction()
+
+# dump_cmake_variables()

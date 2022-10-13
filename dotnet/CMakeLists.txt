@@ -22,3 +22,23 @@ target_include_directories(Main PUBLIC "${NET_PROJECT_DIR}")
 
 
 
+
+
+
+# Consuming the other
+project(thing_using_example
+    LANGUAGES CSharp)
+include(CSharpUtilities)
+
+set(SOURCES
+    ThingUsingExample.cs
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES})
+set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DOTNET_TARGET_FRAMEWORK_VERSION "v4.6.1")
+set_property(TARGET ${PROJECT_NAME} PROPERTY VS_GLOBAL_ROOTNAMESPACE "ThingUsingExample")
+set_property(TARGET ${PROJECT_NAME} PROPERTY VS_GLOBAL_Prefer32Bit "false")
+set(CMAKE_CSharp_FLAGS "${CMAKE_CSharp_FLAGS} /langversion:6")
+add_dependencies(${PROJECT_NAME} mylibs::newlib)
+
+

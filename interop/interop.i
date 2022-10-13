@@ -1,4 +1,4 @@
-%module InteropModule
+%module MyLibraryInterop
 
 %include <std_string.i>
 %include <typemaps.i>
