@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.18)
 # TODO: Figure out how to reference Interop from CSharp
 project(CSINTEROP
   VERSION 1.0.0
-  LANGUAGES CXX # CSharp
+  LANGUAGES CXX
 )
 
 # TODO: Add CSHARP
@@ -13,6 +13,8 @@ set(CSINTEROP_MINOR_VERSION 0)
 set(CSINTEROP_PATCH_VERSION 0)
 set(CSINTEROP_SHORT_VERSION "${CSINTEROP_MAJOR_VERSION}.${CSINTEROP_MINOR_VERSION}")
 set(CSINTEROP_VERSION "${CSINTEROP_SHORT_VERSION}.${CSINTEROP_PATCH_VERSION}")
+
+set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 
 set(LIB_TYPE STATIC)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
@@ -28,4 +30,4 @@ add_subdirectory(native)
 add_subdirectory(interop)
 
 # TODO: Figure out how to reference Interop from CSharp
-# add_subdirectory(dotnet)
+add_subdirectory(dotnet)
