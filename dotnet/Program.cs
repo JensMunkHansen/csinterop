@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CSharp.RuntimeBinder;
+using System;
 
 namespace SampleInterop
 {
@@ -15,7 +16,15 @@ namespace SampleInterop
             var bla = MyLibraryInterop.GetLongString();
 
             var se = new SpaceExclusion();
-            // se.InitializeVertices()
+            try
+            {
+                se.Throwing();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.GetType());
+                // e.Message
+            }
         }
     }
 }

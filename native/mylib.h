@@ -16,4 +16,5 @@ class MYLIBRARY_EXPORT SpaceExclusion {
   int InitializeVertices(const float* pVertices, int nVertices, const int* pIndices, int nIndices,  float strength);
   int AddDepthMap(const float* pDepths, int nWidth, int nDepth, float minZ);
   int Execute(bool** pExcluded, int* nExclusions);
+  void Throwing();
 };

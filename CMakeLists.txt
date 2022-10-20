@@ -32,7 +32,7 @@ set(GLOBAL_NAMESPACE SampleInterop)
 
 set(DOTNET_TARGET_FRAMEWORK ${CSINTEROP_DOTNET_TARGET_FRAMEWORK_VERSION})
 
-set(HACK 0)
+set(HACK 1)
 
 add_subdirectory(native)
 

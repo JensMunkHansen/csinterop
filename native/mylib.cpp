@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 
 std::string version = std::string(CSINTEROP_VERSION_STRING);
 
@@ -39,13 +40,21 @@ int SpaceExclusion::AddDepthMap(const float* pDepths, int nWidth, int nDepth, fl
       std::cout << pDepths[i * nDepth + j] << std::endl;
     }
   }
-   
+
   return EXIT_SUCCESS;
 }
 
 int SpaceExclusion::Execute(bool** pExcluded, int* nExclusions)
 {
-  *nExclusions = 1000; 
+  *nExclusions = 1000;
   *pExcluded = (bool*) malloc(*nExclusions * sizeof(bool));
   return EXIT_SUCCESS;
+}
+
+void SpaceExclusion::Throwing()
+{
+  int k = 2;
+  int l = 5*k;
+  std::cout << l << std::endl;
+  throw std::runtime_error("Shit");
 }

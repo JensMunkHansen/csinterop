@@ -47,9 +47,7 @@ set_property(TARGET MyLibraryInterop PROPERTY DOTNET_TARGET_FRAMEWORK_VERSION ${
 # set_property(TARGET MyLibraryInterop PROPERTY VS_DOTNET_REFERENCES "CSharp")
 
 if (HACK)
-  if (${CSINTEROP_DOTNET_TARGET_FRAMEWORK_VERSION} STREQUAL "v6.0")
-    set(NETDIR "net6.0")
-  endif()
+  set(NETDIR "net6.0")
 
   # for copying .dll to .Net project dir dir
   set_target_properties( MyLibraryInterop
